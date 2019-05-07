@@ -1,5 +1,6 @@
 package com.solveit.sdnu;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,10 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class ScrollingActivity extends AppCompatActivity {
+    public static Context SContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SContext = getApplicationContext();
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,83 +60,43 @@ public class ScrollingActivity extends AppCompatActivity {
             String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36";
             BigInteger user = new BigInteger("19862171157"), need = new BigInteger("1");
             Map<String, String> cookies;
+            //Map<String, String> Data = new HashMap<String, String>();
+            Message err = new Message();
+            err.what = 12;
+            //err.obj = "here";
             try {
                 while (true) {
-                    Toast toast;
-                    Connection con = Jsoup.connect(post);
-                    con.header(USER_AGENT, USER_AGENT_VALUE);
-                    //con.data("strAccount", user.toString()).data("strPassword", "123123").data("id", "2000");
-                    //con.referrer(post);
-                    Connection.Response res = con.execute();
+                    Connection pos = Jsoup.connect(post)
+                            .header(USER_AGENT, USER_AGENT_VALUE)
+                            .data("strAccount", user.toString())
+                            .data("strPassword", "123123")
+                            .data("savePWD", "1")
+                            .data("id", "2000")
+                            .method(Connection.Method.POST);
+                    Connection.Response re = pos.execute();
+                    re.cookies();
+                    Connection get = Jsoup.connect(url)
+                            .header(USER_AGENT, USER_AGENT_VALUE)
+                            .data("strAccount", user.toString())
+                            .data("strPassword", "123123")
+                            .data("savePWD", "1")
+                            .data("id", "2000")
+                            .referrer(post)
+                            .cookies(re.cookies())
+                            .method(Connection.Method.GET);
 
-                    //cookies = res.cookies();
-                    /*cookies.put("myusername", user.toString());
-                    cookies.put("username", user.toString());
-                    cookies.put("smartdot", "123123");*/
-                    Document dd = Jsoup.parse(res.body());
+                    Document doc = get.get();
+                    //err.obj = doc.toString();
+                    //handler.sendMessage(err);
+                    Elements fin = doc.select("td[align=center]");
 
-                    List<org.jsoup.nodes.Element> eleList = dd.select("form");
-
-                    Map<String, String> datas = new HashMap<>();
-
-                    for(int i = 0; i < eleList.size(); i++){
-                        for(org.jsoup.nodes.Element e : eleList.get(i).getAllElements()){
-                            // 设置用户名
-                            if (e.attr("name").equals("strAccount")) {
-                                e.attr("value", user.toString());
-                            }
-                            // 设置用户密码
-                            if (e.attr("name").equals("strPassword")) {
-                                e.attr("value", "123123");
-                            }
-                            if(e.attr("name").equals("id")){
-                                e.attr("value", "2000");
-                            }
-                            // 排除空值表单属性
-                            if (e.attr("value").length() > 2) {
-                                datas.put(e.attr("name"), e.attr("value"));
-                            }
-                        }
-                    }
-
-                    Connection cnn1 = Jsoup.connect(post);
-                    cnn1.header(USER_AGENT, USER_AGENT_VALUE);
-                    //cnn1.referrer(post);
-                    Connection.Response ree = cnn1.ignoreContentType(true).followRedirects(true)
-                            .method(Connection.Method.POST).data(datas)
-                            .cookies(res.cookies())
-                            .execute();
-
-                    cookies = ree.cookies();
-                    Connection cnn = Jsoup.connect(url);
-                    cnn.header(USER_AGENT, USER_AGENT_VALUE);
-                    cnn.referrer(post);
-                    Connection.Response re = cnn//.ignoreContentType(true).followRedirects(true)
-                            .method(Connection.Method.GET)//.data(datas)
-                            .cookies(cookies)
-                            .execute();
-                    Document doc = Jsoup.parse(re.body());
-
-                    Log.d("find", doc.toString());
-                    Elements els = doc.select("td[align=center]");
-                    String aim = els.toString();
-
-                    Log.e("RUN: ", aim);
-                    if(aim.indexOf("登录成功") != -1)
-                        break;
-                    else user = user.subtract(need);
-
-                    //getMainLooper().prepare();
-                    //toast=Toast.makeText(getApplicationContext(),aim,Toast.LENGTH_SHORT);
-                    //toast.show();
-                    //getMainLooper().loop();
-
-                    Thread.sleep(1000);
-                    handler.sendEmptyMessage(user.mod(new BigInteger("10000")).intValue());
-                    //getMainLooper().prepare();
-                    //toast=Toast.makeText(getApplicationContext(),"retry",Toast.LENGTH_SHORT);
-                    //toast.show();
-                    //getMainLooper().loop();
+                    String aim = fin.toString();
+                    if(aim.contains("成功"))break;
+                    else  user = user.subtract(need);
+                    //Message wa = new Message();
+                    //wa.what = 7;
+                    //wa.obj = aim.concat(user.toString());
+                    //handler.sendMessage(wa);
                 }
                 handler.sendEmptyMessage(0);
             }
@@ -144,7 +109,7 @@ public class ScrollingActivity extends AppCompatActivity {
         }
     };
 
-    class MyHandler extends Handler {
+    static class MyHandler extends  Handler {
         //WeakReference<ScrollingActivity> mWeakReference;
         //MyHandler(ScrollingActivity activity)
         //{
@@ -156,16 +121,16 @@ public class ScrollingActivity extends AppCompatActivity {
             //mWeakReference.get().todo();
             if(msg.what == 0){
                 Log.e("handleMessage: ", "win");
-                Toast tt = Toast.makeText(getApplicationContext(), "Solve", Toast.LENGTH_SHORT);
+                Toast tt = Toast.makeText(ScrollingActivity.SContext, "Solve it.", Toast.LENGTH_SHORT);
                 tt.show();
             }
             else if(msg.what == 1){
-                Toast tt = Toast.makeText(getApplicationContext(), "fault", Toast.LENGTH_SHORT);
+                Toast tt = Toast.makeText(ScrollingActivity.SContext, "You really connect SDNU??", Toast.LENGTH_SHORT);
                 tt.show();
             }
             else  {
                 //Log.e("handleMessage: ", "fault");
-                Toast tt = Toast.makeText(getApplicationContext(), msg.toString(), Toast.LENGTH_SHORT);
+                Toast tt = Toast.makeText(ScrollingActivity.SContext, msg.obj.toString(), Toast.LENGTH_SHORT);
                 tt.show();
             }
         }
