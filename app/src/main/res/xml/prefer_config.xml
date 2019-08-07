@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory>
+        android:title="设置"
+    </PreferenceCategory>
+
+    <EditTextPreference
+        android:defaultValue="0"
+        android:inputType="number"
+        android:key="phoneNumber"
+        android:summary="请输入山师范围内移动号码"
+        android:title="初始值" />
+
+    <MultiSelectListPreference
+        android:entries="@array/pref_entries"
+        android:entryValues="@array/pref_values"
+        android:key="RunMod"
+        android:title="选择模式" />
+
 
 </PreferenceScreen>

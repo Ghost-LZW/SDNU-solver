@@ -1,7 +1,21 @@
 <resources>
-    <string name="app_name">SDNU</string>
+    <string name="app_name"> SDNU </string>
+
     <string name="large_text">
         "Touch this send button to solve sdnu\n"
     </string>
-    <string name="action_settings">Settings</string>
+    <string-array name="pref_entries">
+        <item>模式一</item>
+        <item>模式二</item>
+    </string-array>
+    <string-array name="pref_values">
+        <item>1</item>
+        <item>-1</item>
+    </string-array>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="Phone">"请输入sdnu范围内移动号码"</string>
+    <string name="BaseNum">19862171157</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

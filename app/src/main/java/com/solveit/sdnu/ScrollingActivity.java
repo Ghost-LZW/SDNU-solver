@@ -1,5 +1,7 @@
 package com.solveit.sdnu;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,23 +14,23 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Element;
 
-import java.lang.ref.WeakReference;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("ALL")
 public class ScrollingActivity extends AppCompatActivity {
     public static Context SContext;
+
+    Setting myset = new Setting();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class ScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        findViewById(R.id.action_settings);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +53,14 @@ public class ScrollingActivity extends AppCompatActivity {
         });
     }
 
+
+    public void toSetting(){
+            //去下载页面
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.action_settings, myset).commit();
+    }
+
     MyHandler handler = new MyHandler();
 
     Runnable runnable = new Runnable(){
@@ -58,7 +70,8 @@ public class ScrollingActivity extends AppCompatActivity {
             final String post = "http://192.168.255.195:8080/Control?id=1000";
             String USER_AGENT = "User-Agent";
             String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36";
-            BigInteger user = new BigInteger("19862171157"), need = new BigInteger("1");
+            EditText Phone = findViewById(R.id.PhoneNum);
+            BigInteger user = new BigInteger(Phone.getText().toString()), need = new BigInteger("1");
             Map<String, String> cookies;
             //Map<String, String> Data = new HashMap<String, String>();
             Message err = new Message();
@@ -91,7 +104,8 @@ public class ScrollingActivity extends AppCompatActivity {
                     Elements fin = doc.select("td[align=center]");
 
                     String aim = fin.toString();
-                    if(aim.contains("成功"))break;
+
+                    if(aim.contains("成功") || aim.contains("ACK_AUTH"))break;
                     else  user = user.subtract(need);
                     //Message wa = new Message();
                     //wa.what = 7;
@@ -100,9 +114,6 @@ public class ScrollingActivity extends AppCompatActivity {
                 }
                 handler.sendEmptyMessage(0);
             }
-             /* 要执行的操作
-             */
-            // 执行完毕后给handler发送一个空消息
             catch (Exception e) {
                 handler.sendEmptyMessage(1);
             }
@@ -125,7 +136,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 tt.show();
             }
             else if(msg.what == 1){
-                Toast tt = Toast.makeText(ScrollingActivity.SContext, "You really connect SDNU??", Toast.LENGTH_SHORT);
+                Toast tt = Toast.makeText(ScrollingActivity.SContext, "You really connect SDNU??\n请检查是否给予网络权限及是否连接sdnu", Toast.LENGTH_SHORT);
                 tt.show();
             }
             else  {
@@ -154,6 +165,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
         return super.onOptionsItemSelected(item);

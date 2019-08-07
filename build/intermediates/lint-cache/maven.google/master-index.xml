@@ -123,4 +123,10 @@
   <androidx.work/>
   <androidx.sharetarget/>
   <androidx.enterprise/>
+  <androidx.camera/>
+  <androidx.benchmark/>
+  <androidx.security/>
+  <com.google.android.datatransport/>
+  <zipflinger/>
+  <androidx.autofill/>
 </metadata>
