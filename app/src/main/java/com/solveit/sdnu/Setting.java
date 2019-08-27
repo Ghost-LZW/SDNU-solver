@@ -1,7 +1,7 @@
 package com.solveit.sdnu;
 
 import android.os.Bundle;
-import android.support.v14.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragment;
 
 /**
  */
