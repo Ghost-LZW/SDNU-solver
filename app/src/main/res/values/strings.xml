@@ -15,6 +15,10 @@
     <string name="action_settings" translatable="false">Settings</string>
     <string name="Phone">"请输入sdnu范围内移动号码"</string>
     <string name="BaseNum">19862171157</string>
+    <string name="cq">长清</string>
+    <string name="qf">千佛</string>
+    <string name="mod1">模式一</string>
+    <string name="mod2">模式二</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

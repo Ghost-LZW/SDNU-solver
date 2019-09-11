@@ -8,10 +8,58 @@
     tools:context=".ScrollingActivity"
     tools:showIn="@layout/activity_scrolling">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/large_text" />
+
+        <RadioGroup
+            android:id="@+id/where"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:checkedButton="@+id/cqh">
+            <RadioButton
+                android:id="@+id/cqh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cq"/>
+            <RadioButton
+                android:id="@+id/qfs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/qf"/>
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/which"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:checkedButton="@+id/mod1">
+            <RadioButton
+                android:id="@+id/mod1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mod1"/>
+            <RadioButton
+                android:id="@+id/mod2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mod2"/>
+        </RadioGroup>
+
+
+
+    </LinearLayout>
+
+
+
+
 
 </androidx.core.widget.NestedScrollView>

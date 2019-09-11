@@ -66,4 +66,5 @@
         android:layout_gravity="bottom|center">
     </com.google.android.gms.ads.AdView>
 
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

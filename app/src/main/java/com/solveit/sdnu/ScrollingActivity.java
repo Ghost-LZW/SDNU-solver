@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.jsoup.Connection;
@@ -84,12 +86,18 @@ public class ScrollingActivity extends AppCompatActivity {
     Runnable runnable = new Runnable(){
         @Override
         public void run() {
-            final String url = "http://192.168.255.195:8080/Control?id=2000";
-            final String post = "http://192.168.255.195:8080/Control?id=1000";
+            RadioButton wh = findViewById(R.id.cqh);
+            final String url = (wh.isChecked() ? "http://192.168.255.195:8080/Control?id=2000" : "http://192.168.255.205:8080/Control?id=2000");
+            final String post = (wh.isChecked() ? "http://192.168.255.195:8080/Control?id=1000" : "http://192.168.255.205:8080/Control?id=1000");
+
             String USER_AGENT = "User-Agent";
             String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36";
+
             EditText Phone = findViewById(R.id.PhoneNum);
-            BigInteger user = new BigInteger(Phone.getText().toString()), need = new BigInteger("1");
+
+            RadioButton Mod = findViewById(R.id.mod1);
+
+            BigInteger user = new BigInteger(Phone.getText().toString()), need = new BigInteger(Mod.isChecked() ? "1" : "-1");
             Map<String, String> cookies;
             //Map<String, String> Data = new HashMap<String, String>();
             Message err = new Message();
